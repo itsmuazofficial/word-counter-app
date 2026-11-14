@@ -52,11 +52,12 @@ export default function TextInput() {
         <textarea
           className="form-control"
           placeholder="Leave a comment here"
-          style={{ height: 100 }}
+          // style={{ height: 100 }}
           value={text}
           onChange={(e) => {
             setText(e.target.value);
           }}
+          rows="8"
         />
         <button
           type="button"
@@ -131,7 +132,7 @@ export default function TextInput() {
         <p>
           Words Count :
           {
-            text.split("/\s+/").filter((element) => {
+            text.split(/\s+/).filter((element) => {
               return element.length !== 0;
             }).length
           }
