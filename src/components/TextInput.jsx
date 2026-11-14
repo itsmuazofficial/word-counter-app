@@ -150,7 +150,7 @@ export default function TextInput(props) {
       </div>
 
       <div className="mt-3">
-        <h2>Preview</h2>
+        <h2 className="rext-dark">Preview</h2>
         <p className="border p-3 rounded bg-white">
           {text.length > 0 ? text : "Nothing to preview!"}
         </p>
