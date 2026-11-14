@@ -1,151 +1,159 @@
 import React, { useState } from "react";
 
-export default function TextInput() {
-  const [text, setText] = useState("Hello");
-  const [dark, setDark] = useState(false);
-  const clearText = () => {
-    setText("");
-  };
-  // Text ko Uppercase mein convert karne ke liye
+export default function TextInput(props) {
+  const [text, setText] = useState("");
+
   const handleUpClick = () => {
     let newText = text.toUpperCase();
     setText(newText);
   };
 
-  // Text ko Lowercase mein convert karne ke liye
   const handleLoClick = () => {
     let newText = text.toLowerCase();
     setText(newText);
   };
-  // Text ko clipboard par copy karne ke liye
+
+  const handleSentenceCase = () => {
+    if (text.length === 0) return;
+    let lower = text.toLowerCase();
+    let newText = lower.charAt(0).toUpperCase() + lower.slice(1);
+    setText(newText);
+  };
+
+  const handleCapitalize = () => {
+    let newText = text
+      .split(" ")
+      .map((el) => el.charAt(0).toUpperCase() + el.slice(1))
+      .join(" ");
+    setText(newText);
+  };
+
   const handleCopy = () => {
     navigator.clipboard.writeText(text);
-    alert("Text copied to clipboard!");
   };
-  // Text ke beech ki extra spaces khatam karne ke liye
+
   const handleExtraSpaces = () => {
     let newText = text.split(/[ ]+/);
     setText(newText.join(" "));
   };
-  // Har sentence ke pehle letter ko Capital karne ke liye (Sentence Case)
-  const handleSentenceCase = () => {
-    let lower = text.toLowerCase();
-    let capitalized = lower.charAt(0).toUpperCase() + lower.slice(1);
-    setText(capitalized);
+
+  const clearText = () => {
+    setText("");
   };
 
-  // Har lafz (word) ke pehle letter ko Capital karne ke liye (Capitalized Case)
-  const handleCapitalize = () => {
-    let words = text.toLowerCase().split(" ");
-    let capitalizedWords = words.map(
-      (word) => word.charAt(0).toUpperCase() + word.slice(1),
-    );
-    setText(capitalizedWords.join(" "));
+  const handleOnChange = (event) => {
+    setText(event.target.value);
   };
+
   return (
-    <div>
-      <h1 className="mb-3">Free Online Word Counter & Text Utility Tool</h1>
+    <div className="container my-3">
+      <h1 className="mb-3 text-dark">
+        Free Online Word Counter & Text Utility Tool
+      </h1>
       <p className="lead text-muted">
-        A simple and fast tool to count words, characters, read time, and format your text instantly.
+        A simple and fast tool to count words, characters, read time, and format
+        your text instantly.
       </p>
-      <div className="container">
+
+      <div className="mb-3">
         <textarea
           className="form-control"
-          placeholder="Leave a comment here"
-          // style={{ height: 100 }}
           value={text}
-          onChange={(e) => {
-            setText(e.target.value);
-          }}
+          onChange={handleOnChange}
+          placeholder="Enter your text here..."
           rows="8"
         />
+      </div>
+
+      <div className="d-flex flex-wrap gap-2 mb-3">
         <button
+          disabled={text.length === 0}
           type="button"
-          className="btn btn-success m-2"
+          className="btn btn-success"
           onClick={handleUpClick}
         >
           Convert to Uppercase
         </button>
-
         <button
+          disabled={text.length === 0}
           type="button"
-          className="btn btn-warning m-2"
+          className="btn btn-warning"
           onClick={handleLoClick}
         >
           Convert to Lowercase
         </button>
         <button
+          disabled={text.length === 0}
           type="button"
-          className="btn btn-dark m-2"
+          className="btn btn-dark"
           onClick={handleSentenceCase}
         >
           Sentence Case
         </button>
-
         <button
+          disabled={text.length === 0}
           type="button"
-          className="btn btn-secondary m-2"
+          className="btn btn-secondary"
           onClick={handleCapitalize}
         >
           Capitalize Case
         </button>
         <button
+          disabled={text.length === 0}
           type="button"
-          className="btn btn-info m-2 text-white"
+          className="btn btn-info text-white"
           onClick={handleCopy}
         >
           Copy Text
         </button>
         <button
+          disabled={text.length === 0}
           type="button"
-          className="btn btn-secondary m-2"
+          className="btn btn-secondary"
           onClick={handleExtraSpaces}
         >
           Remove Extra Spaces
         </button>
         <button
+          disabled={text.length === 0}
           type="button"
-          className="btn btn-primary m-2"
+          className="btn btn-primary"
           onClick={clearText}
         >
-          Clear
+          Clear Text
         </button>
-        <button
-          type="button"
-          className="btn btn-danger "
-          onClick={() => {
-            if (dark) {
-              document.body.style.backgroundColor = "white";
-              document.body.style.color = "black";
-              setDark(false);
-            } else {
-              document.body.style.backgroundColor = "#212529";
-              document.body.style.color = "white";
-              setDark(true);
-            }
-          }}
-        >
-          toggle
-        </button>
+      </div>
 
-        <p>Characters :{text.length}</p>
+      <div className="card p-3 bg-light border-0 mb-3">
+        <h3>Summary of Your Text</h3>
         <p>
-          Words Count :
-          {
-            text.split(/\s+/).filter((element) => {
-              return element.length !== 0;
-            }).length
-          }
+          <strong>
+            {
+              text.split(/\s+/).filter((element) => {
+                return element.length !== 0;
+              }).length
+            }
+          </strong>{" "}
+          words and <strong>{text.length}</strong> characters
         </p>
         <p>
-          {0.008 *
-            text.split(" ").filter((element) => {
-              return element.length !== 0;
-            }).length}{" "}
+          <strong>
+            {(
+              0.008 *
+              text.split(/\s+/).filter((element) => {
+                return element.length !== 0;
+              }).length
+            ).toFixed(3)}
+          </strong>{" "}
           Minutes read
         </p>
-        <h2 className="mt-3">Preview</h2>
-        <p>{text.length > 0 ? text : "Nothing to preview!"}</p>
+      </div>
+
+      <div className="mt-3">
+        <h2>Preview</h2>
+        <p className="border p-3 rounded bg-white">
+          {text.length > 0 ? text : "Nothing to preview!"}
+        </p>
       </div>
     </div>
   );
