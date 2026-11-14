@@ -44,7 +44,10 @@ export default function TextInput() {
   };
   return (
     <div>
-      <h1>Enter text here</h1>
+      <h1 className="mb-3">Free Online Word Counter & Text Utility Tool</h1>
+      <p className="lead text-muted">
+        A simple and fast tool to count words, characters, read time, and format your text instantly.
+      </p>
       <div className="container">
         <textarea
           className="form-control"
